@@ -412,6 +412,10 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
   width:74px;height:74px;border-radius:50%;background:rgba(59,178,115,.15);color:var(--green);
   display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 22px;
 }
+.confirm-icon.warn{background:rgba(232,131,14,.15);color:var(--orange)}
+.confirm-icon.err{background:rgba(224,82,82,.15);color:#E05252}
+.confirm-icon.spin{animation:spin 1.4s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .confirm-card h2{font-family:'Baloo 2',sans-serif;font-size:26px;margin-bottom:12px}
 .confirm-card p{color:var(--muted);font-size:15px;margin-bottom:6px}
 .confirm-recap{
@@ -731,7 +735,7 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
             <li><span class="ic">–</span> Réseautage privé avec les intervenants</li>
             <li><span class="ic">–</span> Attestation officielle de participation</li>
           </ul>
-          <button class="pass-btn" onclick="openSheet('standard')">Choisir Standard</button>
+          <a href="https://reve-ose-agis.mymaketou.shop/products/kdo-de-noel-0-7-5/checkout" target="_blank" class="pass-btn" style="display:block;text-decoration:none">Choisir Standard →</a>
         </div>
 
         <div class="pass-card vip">
@@ -748,7 +752,7 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
             <li class="on"><span class="ic">✓</span> Réseautage privé avec les intervenants</li>
             <li class="on"><span class="ic">✓</span> Attestation officielle de participation</li>
           </ul>
-          <button class="pass-btn" onclick="openSheet('vip')">Choisir VIP</button>
+          <a href="https://reve-ose-agis.mymaketou.shop/products/kdo-de-noel-0-7/checkout" target="_blank" class="pass-btn" style="display:block;text-decoration:none">Choisir VIP →</a>
         </div>
       </div>
       <p class="pass-note">Paiement sécurisé. Ta place est confirmée dès validation de ton inscription.</p>
@@ -818,24 +822,20 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
   <div class="confirm-wrap">
     <div class="confirm-card">
       <div class="confirm-icon">✓</div>
-      <h2>Ta place est réservée !</h2>
-      <p>Merci <b id="c-nom" style="color:var(--text)"></b>, ton inscription à Déclic a bien été enregistrée.</p>
+      <h2>Merci pour ton paiement !</h2>
+      <p>Ton <b id="c-pass" style="color:var(--text)">pass</b> pour Déclic est enregistré chez Maketou.</p>
 
       <div class="confirm-recap">
-        <div class="row"><span>Pass choisi</span><span id="c-pass">—</span></div>
-        <div class="row"><span>Montant</span><span id="c-montant">—</span></div>
-        <div class="row"><span>Ville</span><span id="c-ville">—</span></div>
         <div class="row"><span>Date de l'événement</span><span>22 août 2026</span></div>
         <div class="row"><span>Lieu</span><span>Royal Palace, Cotonou</span></div>
       </div>
 
       <p style="font-weight:700;color:var(--text)">Dernière étape : confirme ta place sur WhatsApp</p>
-      <p>Écris-nous sur ce numéro pour valider ta présence et rejoindre le groupe des participants Déclic.</p>
+      <p>Écris-nous sur ce numéro avec ton nom pour valider ta présence et rejoindre le groupe des participants Déclic.</p>
 
       <a href="#" id="waLink" target="_blank" class="wa-btn">
         <span>💬</span> Écrire sur WhatsApp
       </a>
-
       <a href="#" class="confirm-back" onclick="goTo('home');return false;">← Retour à l'accueil</a>
     </div>
   </div>
@@ -850,59 +850,19 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
     <button class="sheet-close" onclick="closeSheet()">✕</button>
   </div>
 
-  <div class="pass-select">
-    <div class="pass-opt" id="opt-standard" onclick="selectPass('standard')">
-      <div class="t">Standard</div>
-      <div class="p">5 000 FCFA</div>
-    </div>
-    <div class="pass-opt" id="opt-vip" onclick="selectPass('vip')">
-      <div class="t">VIP</div>
-      <div class="p">10 000 FCFA</div>
-    </div>
-  </div>
+  <p style="color:var(--muted);font-size:14.5px;margin-bottom:22px">Choisis ton pass, tu es redirigé vers le paiement sécurisé Maketou (Mobile Money ou carte).</p>
 
-  <form id="regForm" onsubmit="submitReg(event)">
-    <div class="field">
-      <label>Nom complet</label>
-      <input type="text" name="nom" id="f-nom" required placeholder="Ton nom et prénom">
-    </div>
-    <div class="field">
-      <label>Numéro WhatsApp</label>
-      <input type="tel" name="whatsapp" id="f-whatsapp" required placeholder="Ex : 97 00 00 00">
-    </div>
-    <div class="field">
-      <label>Ville</label>
-      <input type="text" name="ville" id="f-ville" required placeholder="Ex : Cotonou, Porto-Novo, Parakou...">
-    </div>
-    <div class="field">
-      <label>Email <span style="font-weight:400;color:var(--muted-2)">(optionnel)</span></label>
-      <input type="email" name="email" id="f-email" placeholder="ton@email.com">
-      <div class="field-hint">Pour recevoir ta confirmation par email en plus du WhatsApp.</div>
-    </div>
+  <a href="https://reve-ose-agis.mymaketou.shop/products/kdo-de-noel-0-7-5/checkout" target="_blank" class="pass-opt" style="display:block;text-decoration:none;margin-bottom:14px;color:var(--text)">
+    <div class="t">Pass Standard</div>
+    <div class="p">5 000 FCFA</div>
+  </a>
 
-    <!-- ===================================================================
-         ZONE PAIEMENT — À BRANCHER
-         Ici viendra l'appel au SDK de la passerelle choisie (FedaPay,
-         KKiaPay ou CinetPay) une fois le compte marchand créé.
-         Exemple d'intégration KKiaPay (à activer plus tard) :
+  <a href="https://reve-ose-agis.mymaketou.shop/products/kdo-de-noel-0-7/checkout" target="_blank" class="pass-opt" style="display:block;text-decoration:none;color:var(--text)">
+    <div class="t">Pass VIP</div>
+    <div class="p">10 000 FCFA</div>
+  </a>
 
-         KKiaPay.init({
-           amount: selectedPass === 'vip' ? 10000 : 5000,
-           key: "CLE_PUBLIQUE_KKIAPAY",
-           callback: "https://missrevents... /merci",
-           position: "center",
-           theme: "#F5B400"
-         });
-
-         Pour l'instant, le formulaire valide l'inscription et redirige
-         vers la page de confirmation avec le numéro WhatsApp.
-    ==================================================================== -->
-
-    <button type="submit" class="submit-btn" id="submitBtn">
-      <span id="submitLabel">Valider mon inscription</span>
-    </button>
-    <div class="secure-note">🔒 Tes informations restent confidentielles</div>
-  </form>
+  <div class="secure-note" style="margin-top:22px">🔒 Paiement sécurisé via Maketou</div>
 </div>
 
 
@@ -922,12 +882,10 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
 //  CONFIG
 // ============================================================
 const WHATSAPP_NUMBER = "22961199636";
-const WEB3FORMS_KEY = "REMPLACE_PAR_TA_CLE_WEB3FORMS"; // à créer sur web3forms.com, gratuit
 const PASS_PRICES = { standard: 5000, vip: 10000 };
 const PASS_LABELS = { standard: "Pass Standard", vip: "Pass VIP" };
 
 let selectedPass = "vip";
-let lastRegistration = null;
 
 // ============================================================
 //  NAVIGATION SPA
@@ -982,11 +940,9 @@ function toggleFaq(btn){
 }
 
 // ============================================================
-//  SHEET D'INSCRIPTION
+//  SHEET DE RÉSERVATION
 // ============================================================
-function openSheet(passType){
-  if(passType) selectPass(passType);
-  else selectPass(selectedPass);
+function openSheet(){
   document.getElementById('overlay').classList.add('open');
   document.getElementById('sheet').classList.add('open');
   document.body.classList.add('no-scroll');
@@ -996,75 +952,27 @@ function closeSheet(){
   document.getElementById('sheet').classList.remove('open');
   document.body.classList.remove('no-scroll');
 }
-function selectPass(type){
-  selectedPass = type;
-  document.getElementById('opt-standard').classList.toggle('active', type === 'standard');
-  document.getElementById('opt-vip').classList.toggle('active', type === 'vip');
-}
 
 // ============================================================
-//  SOUMISSION DU FORMULAIRE
+//  RETOUR DE PAIEMENT — Maketou redirige vers /?merci=1 (standard)
+//  ou /?merci=vip après un paiement réussi.
 // ============================================================
-async function submitReg(e){
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const label = document.getElementById('submitLabel');
-  const nom = document.getElementById('f-nom').value.trim();
-  const whatsapp = document.getElementById('f-whatsapp').value.trim();
-  const ville = document.getElementById('f-ville').value.trim();
-  const email = document.getElementById('f-email').value.trim();
+function checkReturnFromPayment(){
+  const params = new URLSearchParams(window.location.search);
+  const merci = params.get('merci');
+  if(!merci) return;
 
-  btn.disabled = true;
-  label.textContent = "Validation en cours...";
-
-  const payload = {
-    access_key: WEB3FORMS_KEY,
-    subject: "Nouvelle inscription Déclic — " + PASS_LABELS[selectedPass],
-    from_name: "Site Déclic",
-    nom: nom,
-    whatsapp: whatsapp,
-    ville: ville,
-    email: email || "non renseigné",
-    pass: PASS_LABELS[selectedPass],
-    montant: PASS_PRICES[selectedPass] + " FCFA"
-  };
-
-  lastRegistration = { nom, whatsapp, ville, email, pass: selectedPass };
-
-  try {
-    // Si une clé Web3Forms valide est configurée, on envoie la notification par email.
-    if(WEB3FORMS_KEY && WEB3FORMS_KEY.indexOf("REMPLACE") === -1){
-      await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload)
-      });
-    }
-  } catch(err) {
-    console.error("Erreur envoi Web3Forms:", err);
-  }
-
-  closeSheet();
-  showConfirmation(lastRegistration);
-  btn.disabled = false;
-  label.textContent = "Valider mon inscription";
-  document.getElementById('regForm').reset();
-}
-
-function showConfirmation(reg){
-  document.getElementById('c-nom').textContent = reg.nom || "";
-  document.getElementById('c-pass').textContent = PASS_LABELS[reg.pass];
-  document.getElementById('c-montant').textContent = PASS_PRICES[reg.pass].toLocaleString('fr-FR') + " FCFA";
-  document.getElementById('c-ville').textContent = reg.ville || "—";
+  const pass = merci === 'vip' ? 'vip' : 'standard';
+  document.getElementById('c-pass').textContent = PASS_LABELS[pass];
 
   const msg = encodeURIComponent(
-    "Bonjour, je viens de réserver mon " + PASS_LABELS[reg.pass] + " pour Déclic. " +
-    "Voici mes infos : " + reg.nom + ", " + reg.ville + ". Je confirme ma présence le 22 août 2026."
+    "Bonjour, je viens de payer mon " + PASS_LABELS[pass] + " pour Déclic. Voici mon nom : "
   );
   document.getElementById('waLink').href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + msg;
 
   goTo('confirm');
 }
+window.addEventListener('DOMContentLoaded', checkReturnFromPayment);
 
 // ============================================================
 //  COMPTE À REBOURS — 22 août 2026, 10h30 (heure de Cotonou, UTC+1)
