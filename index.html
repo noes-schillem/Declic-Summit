@@ -524,10 +524,10 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
         </div>
         <h1 class="hero-title display">Déclic</h1>
         <p class="hero-sub">Le Sommet Africain de l'Activation du Potentiel</p>
-        <p class="hero-tagline">Oser. Créer. Révéler l'Afrique. Une journée pour transformer tes idées en projets qui changent des vies.</p>
+        <p class="hero-tagline">Oser. Créer. Révéler l'Afrique.<br>Une journée pour transformer tes idées en projets qui changent des vies.</p>
 
         <div class="hero-meta">
-          <div class="meta-pill"><span class="dot"></span> 22 août 2026, 11h à 18h</div>
+          <div class="meta-pill"><span class="dot"></span> 22 août 2026, 10h30 à 18h</div>
           <div class="meta-pill"><span class="dot"></span> Royal Palace, Cotonou</div>
           <div class="meta-pill"><span class="dot"></span> 300 places seulement</div>
         </div>
@@ -604,8 +604,8 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
       </div>
       <div class="what-card">
         <div class="k">Le thème de cette édition</div>
-        <p style="color:var(--text);font-weight:700;font-size:17px">Oser. Créer. Révéler l'Afrique.</p>
-        <p>Comment transformer ses idées en projets qui changent des vies ? Une journée entière pour découvrir comment passer de l'idée à l'action et construire des projets qui transforment durablement notre continent.</p>
+        <p style="color:var(--text);font-weight:700;font-size:17px">Oser. Créer. Révéler l'Afrique : Comment transformer ses idées en projets qui changent des vies.</p>
+        <p>Une journée entière pour découvrir comment passer de l'idée à l'action et construire des projets qui transforment durablement notre continent.</p>
       </div>
     </div>
   </section>
@@ -764,7 +764,7 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
       <div class="faq-list">
         <div class="faq-item">
           <button class="faq-q" onclick="toggleFaq(this)">Quand et où a lieu Déclic ?<span class="plus">+</span></button>
-          <div class="faq-a"><p>Déclic se tient le 22 août 2026, de 11h à 18h, au Royal Palace de Cotonou, au Bénin.</p></div>
+          <div class="faq-a"><p>Déclic se tient le 22 août 2026, de 10h30 à 18h, au Royal Palace de Cotonou, au Bénin.</p></div>
         </div>
         <div class="faq-item">
           <button class="faq-q" onclick="toggleFaq(this)">Quelle est la différence entre le Pass Standard et le Pass VIP ?<span class="plus">+</span></button>
@@ -1067,10 +1067,10 @@ function showConfirmation(reg){
 }
 
 // ============================================================
-//  COMPTE À REBOURS — 22 août 2026, 11h00 (heure de Cotonou, UTC+1)
+//  COMPTE À REBOURS — 22 août 2026, 10h30 (heure de Cotonou, UTC+1)
 // ============================================================
 function updateCountdown(){
-  const target = new Date("2026-08-22T11:00:00+01:00").getTime();
+  const target = new Date("2026-08-22T10:30:00+01:00").getTime();
   const now = new Date().getTime();
   let diff = target - now;
   if(diff < 0) diff = 0;
