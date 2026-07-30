@@ -425,6 +425,27 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
 .confirm-recap .row{display:flex;justify-content:space-between}
 .confirm-recap .row span:first-child{color:var(--muted-2)}
 .confirm-recap .row span:last-child{font-weight:700}
+.receipt-card{
+  background:linear-gradient(160deg,rgba(245,180,0,.10),var(--bg-soft) 55%);
+  border:1.5px dashed rgba(245,180,0,.4);border-radius:18px;
+  padding:30px 24px;text-align:center;
+}
+.receipt-check{
+  width:52px;height:52px;border-radius:50%;background:rgba(59,178,115,.15);color:var(--green);
+  display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 14px;
+}
+.receipt-congrats{font-family:'Baloo 2',sans-serif;font-size:21px;font-weight:800;color:var(--text);margin-bottom:2px}
+.receipt-congrats span{color:var(--gold)}
+.receipt-sub{font-size:14px;color:var(--muted);margin-bottom:10px}
+.receipt-pass{
+  font-family:'Baloo 2',sans-serif;font-size:26px;font-weight:800;letter-spacing:.02em;
+  color:#171310;background:linear-gradient(135deg,var(--gold-soft),var(--gold));
+  border-radius:100px;padding:10px 26px;display:inline-block;margin:6px 0 18px;
+}
+.receipt-divider{border-top:1px dashed rgba(245,180,0,.3);margin:16px 0}
+.receipt-row{display:flex;justify-content:space-between;font-size:13.5px;padding:5px 0}
+.receipt-row span:first-child{color:var(--muted-2)}
+.receipt-row span:last-child{font-weight:700;color:var(--text)}
 .wa-btn{
   display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
   background:#25D366;color:#0a2a17;font-weight:800;padding:16px;border-radius:14px;margin-top:8px;font-size:15px;
@@ -735,7 +756,7 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
             <li><span class="ic">–</span> Réseautage privé avec les intervenants</li>
             <li><span class="ic">–</span> Attestation officielle de participation</li>
           </ul>
-          <a href="https://reve-ose-agis.mymaketou.shop/products/kdo-de-noel-0-7-5/checkout" target="_blank" class="pass-btn" style="display:block;text-decoration:none">Choisir Standard →</a>
+          <button class="pass-btn" onclick="openSheet('standard')" style="width:100%">Choisir Standard →</button>
         </div>
 
         <div class="pass-card vip">
@@ -752,10 +773,10 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
             <li class="on"><span class="ic">✓</span> Réseautage privé avec les intervenants</li>
             <li class="on"><span class="ic">✓</span> Attestation officielle de participation</li>
           </ul>
-          <a href="https://reve-ose-agis.mymaketou.shop/products/kdo-de-noel-0-7/checkout" target="_blank" class="pass-btn" style="display:block;text-decoration:none">Choisir VIP →</a>
+          <button class="pass-btn" onclick="openSheet('vip')" style="width:100%">Choisir VIP →</button>
         </div>
       </div>
-      <p class="pass-note">Paiement sécurisé. Ta place est confirmée dès validation de ton inscription.</p>
+      <p class="pass-note">Paiement sécurisé via Maketou. Dernière étape : capture d'écran de ton paiement à nous envoyer sur WhatsApp.</p>
     </div>
   </section>
 
@@ -821,22 +842,42 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
 <div id="view-confirm" class="view">
   <div class="confirm-wrap">
     <div class="confirm-card">
-      <div class="confirm-icon">✓</div>
-      <h2>Merci pour ton paiement !</h2>
-      <p>Ton <b id="c-pass" style="color:var(--text)">pass</b> pour Déclic est enregistré chez Maketou.</p>
 
-      <div class="confirm-recap">
-        <div class="row"><span>Date de l'événement</span><span>22 août 2026</span></div>
-        <div class="row"><span>Lieu</span><span>Royal Palace, Cotonou</span></div>
+      <!-- État : reçu de paiement -->
+      <div id="state-success" class="confirm-state" style="display:none">
+
+        <div class="receipt-card">
+          <div class="receipt-check">✓</div>
+          <p class="receipt-congrats">Félicitations <span id="c-nom"></span> !</p>
+          <p class="receipt-sub">Vous venez de réserver votre</p>
+          <div class="receipt-pass" id="c-pass">PASS</div>
+          <div class="receipt-divider"></div>
+          <div class="receipt-row"><span>Événement</span><span>Déclic</span></div>
+          <div class="receipt-row"><span>Date</span><span>22 août 2026</span></div>
+          <div class="receipt-row"><span>Lieu</span><span>Royal Palace, Cotonou</span></div>
+        </div>
+
+        <p style="font-weight:700;color:var(--text);margin-top:22px">📸 Fais une capture d'écran de ce reçu</p>
+        <p style="font-size:13.5px;color:var(--muted-2)">Envoie-la nous sur WhatsApp pour valider définitivement ta place.</p>
+
+        <a href="#" id="waLink" target="_blank" class="wa-btn" style="margin-top:6px">
+          <span>💬</span> Envoyer mon reçu sur WhatsApp
+        </a>
+        <a href="#" class="confirm-back" onclick="goTo('home');return false;">← Retour à l'accueil</a>
       </div>
 
-      <p style="font-weight:700;color:var(--text)">Dernière étape : confirme ta place sur WhatsApp</p>
-      <p>Écris-nous sur ce numéro avec ton nom pour valider ta présence et rejoindre le groupe des participants Déclic.</p>
+      <!-- État : secours si les infos n'ont pas pu être retrouvées -->
+      <div id="state-failed" class="confirm-state" style="display:none">
+        <div class="confirm-icon warn">💬</div>
+        <h2>Ton paiement est bien reçu</h2>
+        <p>On n'a pas pu retrouver automatiquement tes informations sur cet appareil (ça arrive si tu as changé de navigateur en cours de route).</p>
+        <p style="font-weight:700;color:var(--text)">Pas d'inquiétude : envoie-nous sur WhatsApp une capture d'écran de ton paiement avec ton nom, on valide ta place manuellement.</p>
+        <a href="https://wa.me/22961199636" target="_blank" class="wa-btn" style="margin-top:12px">
+          <span>💬</span> Nous écrire sur WhatsApp
+        </a>
+        <a href="#" class="confirm-back" onclick="goTo('home');return false;">← Retour à l'accueil</a>
+      </div>
 
-      <a href="#" id="waLink" target="_blank" class="wa-btn">
-        <span>💬</span> Écrire sur WhatsApp
-      </a>
-      <a href="#" class="confirm-back" onclick="goTo('home');return false;">← Retour à l'accueil</a>
     </div>
   </div>
 </div>
@@ -850,19 +891,36 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
     <button class="sheet-close" onclick="closeSheet()">✕</button>
   </div>
 
-  <p style="color:var(--muted);font-size:14.5px;margin-bottom:22px">Choisis ton pass, tu es redirigé vers le paiement sécurisé Maketou (Mobile Money ou carte).</p>
+  <div class="pass-select">
+    <div class="pass-opt" id="opt-standard" onclick="selectPass('standard')">
+      <div class="t">Standard</div>
+      <div class="p">5 000 FCFA</div>
+    </div>
+    <div class="pass-opt" id="opt-vip" onclick="selectPass('vip')">
+      <div class="t">VIP</div>
+      <div class="p">10 000 FCFA</div>
+    </div>
+  </div>
 
-  <a href="https://reve-ose-agis.mymaketou.shop/products/kdo-de-noel-0-7-5/checkout" target="_blank" class="pass-opt" style="display:block;text-decoration:none;margin-bottom:14px;color:var(--text)">
-    <div class="t">Pass Standard</div>
-    <div class="p">5 000 FCFA</div>
-  </a>
+  <form id="regForm" onsubmit="submitReg(event)">
+    <div class="field">
+      <label>Nom complet</label>
+      <input type="text" name="nom" id="f-nom" required placeholder="Ton nom et prénom">
+    </div>
+    <div class="field">
+      <label>Numéro WhatsApp</label>
+      <input type="tel" name="whatsapp" id="f-whatsapp" required placeholder="Ex : 97 00 00 00">
+    </div>
+    <div class="field">
+      <label>Ville</label>
+      <input type="text" name="ville" id="f-ville" required placeholder="Ex : Cotonou, Porto-Novo, Parakou...">
+    </div>
 
-  <a href="https://reve-ose-agis.mymaketou.shop/products/kdo-de-noel-0-7/checkout" target="_blank" class="pass-opt" style="display:block;text-decoration:none;color:var(--text)">
-    <div class="t">Pass VIP</div>
-    <div class="p">10 000 FCFA</div>
-  </a>
-
-  <div class="secure-note" style="margin-top:22px">🔒 Paiement sécurisé via Maketou</div>
+    <button type="submit" class="submit-btn" id="submitBtn">
+      <span id="submitLabel">Valider et payer →</span>
+    </button>
+    <div class="secure-note">🔒 Paiement sécurisé via Maketou</div>
+  </form>
 </div>
 
 
@@ -882,6 +940,8 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
 //  CONFIG
 // ============================================================
 const WHATSAPP_NUMBER = "22961199636";
+const MAKETOU_LINK_STANDARD = "https://reve-oses-agir.mymaketou.shop/products/declic-5000f-standar/checkout";
+const MAKETOU_LINK_VIP = "https://reve-oses-agir.mymaketou.shop/products/declic-10000f-vip/checkout";
 const PASS_PRICES = { standard: 5000, vip: 10000 };
 const PASS_LABELS = { standard: "Pass Standard", vip: "Pass VIP" };
 
@@ -942,7 +1002,8 @@ function toggleFaq(btn){
 // ============================================================
 //  SHEET DE RÉSERVATION
 // ============================================================
-function openSheet(){
+function openSheet(passType){
+  selectPass(passType || selectedPass);
   document.getElementById('overlay').classList.add('open');
   document.getElementById('sheet').classList.add('open');
   document.body.classList.add('no-scroll');
@@ -952,25 +1013,66 @@ function closeSheet(){
   document.getElementById('sheet').classList.remove('open');
   document.body.classList.remove('no-scroll');
 }
+function selectPass(type){
+  selectedPass = type;
+  document.getElementById('opt-standard').classList.toggle('active', type === 'standard');
+  document.getElementById('opt-vip').classList.toggle('active', type === 'vip');
+}
+
+// ============================================================
+//  SOUMISSION DU FORMULAIRE — on garde les infos sur cet appareil,
+//  puis on redirige directement vers le lien de paiement Maketou.
+//  Aucun serveur, aucune clé API : tout se passe dans le navigateur.
+// ============================================================
+function submitReg(e){
+  e.preventDefault();
+  const nom = document.getElementById('f-nom').value.trim();
+  const whatsapp = document.getElementById('f-whatsapp').value.trim();
+  const ville = document.getElementById('f-ville').value.trim();
+
+  sessionStorage.setItem('declic_reg', JSON.stringify({ nom, whatsapp, ville, pass: selectedPass }));
+
+  const link = selectedPass === 'vip' ? MAKETOU_LINK_VIP : MAKETOU_LINK_STANDARD;
+  window.location.href = link;
+}
 
 // ============================================================
 //  RETOUR DE PAIEMENT — Maketou redirige vers /?merci=1 (standard)
-//  ou /?merci=vip après un paiement réussi.
+//  ou /?merci=vip. On retrouve les infos gardées avant paiement et
+//  on affiche un reçu que la personne doit capturer et nous envoyer
+//  sur WhatsApp. Aucune vérification automatique du paiement : c'est
+//  cette capture d'écran, comparée à la liste des ventes Maketou,
+//  qui sert de preuve.
 // ============================================================
 function checkReturnFromPayment(){
   const params = new URLSearchParams(window.location.search);
   const merci = params.get('merci');
   if(!merci) return;
 
-  const pass = merci === 'vip' ? 'vip' : 'standard';
-  document.getElementById('c-pass').textContent = PASS_LABELS[pass];
+  const regRaw = sessionStorage.getItem('declic_reg');
+
+  if(!regRaw){
+    goTo('confirm');
+    document.getElementById('state-success').style.display = 'none';
+    document.getElementById('state-failed').style.display = 'block';
+    return;
+  }
+
+  const reg = JSON.parse(regRaw);
+  const passLabel = PASS_LABELS[reg.pass] || "PASS";
+
+  document.getElementById('c-nom').textContent = reg.nom || "";
+  document.getElementById('c-pass').textContent = passLabel.toUpperCase();
 
   const msg = encodeURIComponent(
-    "Bonjour, je viens de payer mon " + PASS_LABELS[pass] + " pour Déclic. Voici mon nom : "
+    "Bonjour, je viens de payer mon " + passLabel + " pour Déclic. " +
+    "Voici mes infos : " + reg.nom + ", " + reg.ville + ". Je joins ma capture d'écran de paiement."
   );
   document.getElementById('waLink').href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + msg;
 
   goTo('confirm');
+  document.getElementById('state-failed').style.display = 'none';
+  document.getElementById('state-success').style.display = 'block';
 }
 window.addEventListener('DOMContentLoaded', checkReturnFromPayment);
 
