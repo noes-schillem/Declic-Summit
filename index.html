@@ -855,6 +855,8 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
           <div class="receipt-row"><span>Événement</span><span>Déclic</span></div>
           <div class="receipt-row"><span>Date</span><span>22 août 2026</span></div>
           <div class="receipt-row"><span>Lieu</span><span>Royal Palace, Cotonou</span></div>
+          <div class="receipt-divider"></div>
+          <div class="receipt-row"><span>N° de confirmation</span><span id="c-code" style="color:var(--gold);font-family:'JetBrains Mono',monospace;letter-spacing:.05em">—</span></div>
         </div>
 
         <p style="font-weight:700;color:var(--text);margin-top:22px">📸 Fais une capture d'écran de ce reçu</p>
@@ -1024,13 +1026,26 @@ function selectPass(type){
 //  puis on redirige directement vers le lien de paiement Maketou.
 //  Aucun serveur, aucune clé API : tout se passe dans le navigateur.
 // ============================================================
+function generateCode(){
+  // Code unique à 6 caractères (lettres/chiffres, sans 0/O/1/I pour éviter
+  // les confusions). Suffisant pour des centaines de participants sans
+  // collision réaliste.
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for(let i = 0; i < 6; i++){
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return 'DCL-' + code;
+}
+
 function submitReg(e){
   e.preventDefault();
   const nom = document.getElementById('f-nom').value.trim();
   const whatsapp = document.getElementById('f-whatsapp').value.trim();
   const ville = document.getElementById('f-ville').value.trim();
+  const code = generateCode();
 
-  sessionStorage.setItem('declic_reg', JSON.stringify({ nom, whatsapp, ville, pass: selectedPass }));
+  sessionStorage.setItem('declic_reg', JSON.stringify({ nom, whatsapp, ville, pass: selectedPass, code }));
 
   const link = selectedPass === 'vip' ? MAKETOU_LINK_VIP : MAKETOU_LINK_STANDARD;
   window.location.href = link;
@@ -1039,10 +1054,10 @@ function submitReg(e){
 // ============================================================
 //  RETOUR DE PAIEMENT — Maketou redirige vers /?merci=1 (standard)
 //  ou /?merci=vip. On retrouve les infos gardées avant paiement et
-//  on affiche un reçu que la personne doit capturer et nous envoyer
-//  sur WhatsApp. Aucune vérification automatique du paiement : c'est
-//  cette capture d'écran, comparée à la liste des ventes Maketou,
-//  qui sert de preuve.
+//  on affiche un reçu (avec le code de confirmation) que la personne
+//  doit capturer et nous envoyer sur WhatsApp. Aucune vérification
+//  automatique du paiement : c'est cette capture d'écran, comparée
+//  à la liste des ventes Maketou, qui sert de preuve.
 // ============================================================
 function checkReturnFromPayment(){
   const params = new URLSearchParams(window.location.search);
@@ -1060,13 +1075,15 @@ function checkReturnFromPayment(){
 
   const reg = JSON.parse(regRaw);
   const passLabel = PASS_LABELS[reg.pass] || "PASS";
+  const code = reg.code || generateCode();
 
   document.getElementById('c-nom').textContent = reg.nom || "";
   document.getElementById('c-pass').textContent = passLabel.toUpperCase();
+  document.getElementById('c-code').textContent = code;
 
   const msg = encodeURIComponent(
     "Bonjour, je viens de payer mon " + passLabel + " pour Déclic. " +
-    "Voici mes infos : " + reg.nom + ", " + reg.ville + ". Je joins ma capture d'écran de paiement."
+    "Voici mes infos : " + reg.nom + ", " + reg.ville + ". Mon code de confirmation : " + code + ". Je joins ma capture d'écran de paiement."
   );
   document.getElementById('waLink').href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + msg;
 
