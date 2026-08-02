@@ -904,25 +904,12 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
     </div>
   </div>
 
-  <form id="regForm" onsubmit="submitReg(event)">
-    <div class="field">
-      <label>Nom complet</label>
-      <input type="text" name="nom" id="f-nom" required placeholder="Ton nom et prénom">
-    </div>
-    <div class="field">
-      <label>Numéro WhatsApp</label>
-      <input type="tel" name="whatsapp" id="f-whatsapp" required placeholder="Ex : 97 00 00 00">
-    </div>
-    <div class="field">
-      <label>Ville</label>
-      <input type="text" name="ville" id="f-ville" required placeholder="Ex : Cotonou, Porto-Novo, Parakou...">
-    </div>
+  <p style="font-size:14px;color:var(--muted-2);margin:4px 0 18px">Tu seras redirigé vers notre billetterie sécurisée pour finaliser ton paiement par Mobile Money.</p>
 
-    <button type="submit" class="submit-btn" id="submitBtn">
-      <span id="submitLabel">Valider et payer →</span>
-    </button>
-    <div class="secure-note">🔒 Paiement sécurisé via Maketou</div>
-  </form>
+  <button type="button" class="submit-btn" id="submitBtn" onclick="goToFaevent()">
+    <span id="submitLabel">Continuer vers le paiement →</span>
+  </button>
+  <div class="secure-note">🔒 Paiement sécurisé via Faevent</div>
 </div>
 
 
@@ -942,8 +929,8 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
 //  CONFIG
 // ============================================================
 const WHATSAPP_NUMBER = "22961199636";
-const MAKETOU_LINK_STANDARD = "https://reve-oses-agir.mymaketou.shop/products/declic-5000f-standar/checkout";
-const MAKETOU_LINK_VIP = "https://reve-oses-agir.mymaketou.shop/products/declic-10000f-vip/checkout";
+const FAEVENT_LINK_STANDARD = "https://faevent.bj/declic---standard--1144";
+const FAEVENT_LINK_VIP = "https://faevent.bj/declic--1143";
 const PASS_PRICES = { standard: 5000, vip: 10000 };
 const PASS_LABELS = { standard: "Pass Standard", vip: "Pass VIP" };
 
@@ -1022,76 +1009,17 @@ function selectPass(type){
 }
 
 // ============================================================
-//  SOUMISSION DU FORMULAIRE — on garde les infos sur cet appareil,
-//  puis on redirige directement vers le lien de paiement Maketou.
-//  Aucun serveur, aucune clé API : tout se passe dans le navigateur.
+//  REDIRECTION VERS LA BILLETTERIE FAEVENT — le paiement, la
+//  génération du vrai billet (QR code) et l'envoi par email sont
+//  entièrement gérés par Faevent. Notre site n'a plus besoin de
+//  générer de faux reçu : on ouvre simplement la bonne page selon
+//  le pass choisi.
 // ============================================================
-function generateCode(){
-  // Code unique à 6 caractères (lettres/chiffres, sans 0/O/1/I pour éviter
-  // les confusions). Suffisant pour des centaines de participants sans
-  // collision réaliste.
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = '';
-  for(let i = 0; i < 6; i++){
-    code += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return 'DCL-' + code;
+function goToFaevent(){
+  const link = selectedPass === 'vip' ? FAEVENT_LINK_VIP : FAEVENT_LINK_STANDARD;
+  window.open(link, '_blank');
+  closeSheet();
 }
-
-function submitReg(e){
-  e.preventDefault();
-  const nom = document.getElementById('f-nom').value.trim();
-  const whatsapp = document.getElementById('f-whatsapp').value.trim();
-  const ville = document.getElementById('f-ville').value.trim();
-  const code = generateCode();
-
-  sessionStorage.setItem('declic_reg', JSON.stringify({ nom, whatsapp, ville, pass: selectedPass, code }));
-
-  const link = selectedPass === 'vip' ? MAKETOU_LINK_VIP : MAKETOU_LINK_STANDARD;
-  window.location.href = link;
-}
-
-// ============================================================
-//  RETOUR DE PAIEMENT — Maketou redirige vers /?merci=1 (standard)
-//  ou /?merci=vip. On retrouve les infos gardées avant paiement et
-//  on affiche un reçu (avec le code de confirmation) que la personne
-//  doit capturer et nous envoyer sur WhatsApp. Aucune vérification
-//  automatique du paiement : c'est cette capture d'écran, comparée
-//  à la liste des ventes Maketou, qui sert de preuve.
-// ============================================================
-function checkReturnFromPayment(){
-  const params = new URLSearchParams(window.location.search);
-  const merci = params.get('merci');
-  if(!merci) return;
-
-  const regRaw = sessionStorage.getItem('declic_reg');
-
-  if(!regRaw){
-    goTo('confirm');
-    document.getElementById('state-success').style.display = 'none';
-    document.getElementById('state-failed').style.display = 'block';
-    return;
-  }
-
-  const reg = JSON.parse(regRaw);
-  const passLabel = PASS_LABELS[reg.pass] || "PASS";
-  const code = reg.code || generateCode();
-
-  document.getElementById('c-nom').textContent = reg.nom || "";
-  document.getElementById('c-pass').textContent = passLabel.toUpperCase();
-  document.getElementById('c-code').textContent = code;
-
-  const msg = encodeURIComponent(
-    "Bonjour, je viens de payer mon " + passLabel + " pour Déclic. " +
-    "Voici mes infos : " + reg.nom + ", " + reg.ville + ". Mon code de confirmation : " + code + ". Je joins ma capture d'écran de paiement."
-  );
-  document.getElementById('waLink').href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + msg;
-
-  goTo('confirm');
-  document.getElementById('state-failed').style.display = 'none';
-  document.getElementById('state-success').style.display = 'block';
-}
-window.addEventListener('DOMContentLoaded', checkReturnFromPayment);
 
 // ============================================================
 //  COMPTE À REBOURS — 22 août 2026, 10h30 (heure de Cotonou, UTC+1)
