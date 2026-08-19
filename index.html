@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <!-- Meta Pixel Code -->
+<!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -312,6 +312,8 @@ h2.section-title{font-size:clamp(32px,4.2vw,50px);margin-top:14px;line-height:1.
 .pass-card.vip .pass-name{color:var(--gold-soft)}
 .pass-price{font-family:'Baloo 2',sans-serif;font-size:44px;font-weight:800;margin:12px 0 4px}
 .pass-price small{font-size:15px;color:var(--muted-2);font-weight:600}
+.pass-price-old{font-family:'Inter',sans-serif;font-size:17px;font-weight:600;color:var(--muted-2);text-decoration:line-through;text-decoration-color:rgba(180,60,60,.7);margin:10px 0 0}
+.promo-badge{display:inline-block;background:rgba(200,40,40,.14);color:#e85454;font-family:'Inter',sans-serif;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:6px}
 .pass-list{list-style:none;margin:24px 0 28px;display:flex;flex-direction:column;gap:12px}
 .pass-list li{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--muted)}
 .pass-list li.on{color:var(--text)}
@@ -762,7 +764,9 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
       <div class="pass-grid">
         <div class="pass-card">
           <div class="pass-name">Pass Standard</div>
-          <div class="pass-price">5 000 <small>FCFA</small></div>
+          <div class="promo-badge">Offre de lancement</div>
+          <div class="pass-price-old">5 000 FCFA</div>
+          <div class="pass-price">3 500 <small>FCFA</small></div>
           <ul class="pass-list">
             <li class="on"><span class="ic">✓</span> Accès au sommet</li>
             <li class="on"><span class="ic">✓</span> Accès aux ateliers</li>
@@ -779,7 +783,9 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
         <div class="pass-card vip">
           <div class="pass-ribbon">Le plus choisi</div>
           <div class="pass-name">Pass VIP</div>
-          <div class="pass-price">10 000 <small>FCFA</small></div>
+          <div class="promo-badge">Offre de lancement</div>
+          <div class="pass-price-old">10 000 FCFA</div>
+          <div class="pass-price">7 000 <small>FCFA</small></div>
           <ul class="pass-list">
             <li class="on"><span class="ic">✓</span> Accès au sommet</li>
             <li class="on"><span class="ic">✓</span> Accès aux ateliers</li>
@@ -913,11 +919,11 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
   <div class="pass-select">
     <div class="pass-opt" id="opt-standard" onclick="selectPass('standard')">
       <div class="t">Standard</div>
-      <div class="p">5 000 FCFA</div>
+      <div class="p">3 500 FCFA <span style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--muted-2);text-decoration:line-through">5 000</span></div>
     </div>
     <div class="pass-opt" id="opt-vip" onclick="selectPass('vip')">
       <div class="t">VIP</div>
-      <div class="p">10 000 FCFA</div>
+      <div class="p">7 000 FCFA <span style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--muted-2);text-decoration:line-through">10 000</span></div>
     </div>
   </div>
 
@@ -948,7 +954,7 @@ footer{padding:50px 0 30px;border-top:1px solid var(--card-line)}
 const WHATSAPP_NUMBER = "22961199636";
 const FAEVENT_LINK_STANDARD = "https://faevent.bj/declic---standard--1144";
 const FAEVENT_LINK_VIP = "https://faevent.bj/declic--1143";
-const PASS_PRICES = { standard: 5000, vip: 10000 };
+const PASS_PRICES = { standard: 3500, vip: 7000 };
 const PASS_LABELS = { standard: "Pass Standard", vip: "Pass VIP" };
 
 let selectedPass = "vip";
